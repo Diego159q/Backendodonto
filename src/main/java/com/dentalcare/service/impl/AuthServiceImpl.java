@@ -61,21 +61,26 @@ public class AuthServiceImpl implements IAuthService {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario", "email", request.getEmail()));
+        Usuario usuario = usuarioRepository.findByEmailWithRol(request.getEmail())
+                .orElseGet(() -> usuarioRepository.findByEmail(request.getEmail())
+                        .orElseThrow(() -> new ResourceNotFoundException("Usuario", "email", request.getEmail())));
 
-        String token = jwtTokenProvider.generateToken(usuario.getId(), usuario.getEmail(), usuario.getRol().getNombre());
+        String rolNombre = usuario.getRol() != null ? usuario.getRol().getNombre() : "PACIENTE";
+        String token = jwtTokenProvider.generateToken(usuario.getId(), usuario.getEmail(), rolNombre);
 
         usuario.setUltimoAcceso(LocalDateTime.now());
         usuarioRepository.save(usuario);
+
+        String nombreCompleto = (usuario.getNombres() != null ? usuario.getNombres() : "") + 
+                                (usuario.getApellidos() != null ? " " + usuario.getApellidos() : "").trim();
 
         return LoginResponse.builder()
                 .token(token)
                 .tipo("Bearer")
                 .id(usuario.getId())
-                .nombres(usuario.getNombres() + " " + usuario.getApellidos())
+                .nombres(nombreCompleto.isEmpty() ? usuario.getEmail() : nombreCompleto)
                 .email(usuario.getEmail())
-                .rol(usuario.getRol() != null ? usuario.getRol().getNombre() : null)
+                .rol(rolNombre)
                 .expiresIn(jwtExpiration)
                 .build();
     }
@@ -175,12 +180,16 @@ public class AuthServiceImpl implements IAuthService {
 
     @Override
     public LoginResponse obtenerUsuarioActual(String email) {
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario", "email", email));
+        Usuario usuario = usuarioRepository.findByEmailWithRol(email)
+                .orElseGet(() -> usuarioRepository.findByEmail(email)
+                        .orElseThrow(() -> new ResourceNotFoundException("Usuario", "email", email)));
                 
+        String nombreCompleto = (usuario.getNombres() != null ? usuario.getNombres() : "") + 
+                                (usuario.getApellidos() != null ? " " + usuario.getApellidos() : "").trim();
+
         return LoginResponse.builder()
                 .id(usuario.getId())
-                .nombres(usuario.getNombres() + " " + usuario.getApellidos())
+                .nombres(nombreCompleto.isEmpty() ? usuario.getEmail() : nombreCompleto)
                 .email(usuario.getEmail())
                 .rol(usuario.getRol() != null ? usuario.getRol().getNombre() : null)
                 .build();
