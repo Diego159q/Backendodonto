@@ -1,0 +1,37 @@
+# Compiled Java
+*.class
+*.jar
+*.war
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+application.properties
+!src/main/resources/application.properties
+!application.properties.example
+.env
+
+# Logs
+*.log
+spring.log
+
+# Uploads
+uploads/
+
+# Build
+build/

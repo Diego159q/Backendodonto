@@ -1,0 +1,49 @@
+# ============================================================
+# DENTALCARE SYSTEM - Configuracion de ejemplo
+# Copie este archivo como application.properties y configure
+# sus propias credenciales. NUNCA suba contraseñas reales a Git.
+# ============================================================
+
+server.port=8080
+server.servlet.context-path=/api
+
+spring.jackson.time-zone=America/Lima
+spring.jackson.date-format=yyyy-MM-dd'T'HH:mm:ss
+
+# PostgreSQL Local
+spring.datasource.url=jdbc:postgresql://localhost:5432/dentalcare
+spring.datasource.username=postgres
+spring.datasource.password=tu_contraseña_aqui
+
+# O PostgreSQL en Supabase (produccion)
+# spring.datasource.url=jdbc:postgresql://host.supabase.co:5432/postgres?sslmode=require
+# spring.datasource.username=postgres
+# spring.datasource.password=tu_contraseña_supabase
+
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.format-sql=true
+
+# JWT - Usar una clave secreta larga y segura
+jwt.secret=UnA_CLav3_S3gur4_D3_Al_M3n0s_256_B1tS_P4r4_F1rm4r_JWT_D3_D3nt4lC4r3
+jwt.expiration=86400000
+
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=10MB
+
+app.file.upload-dir=./uploads
+app.file.allowed-extensions=jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx
+app.file.max-size=10485760
+
+# Configuracion de correo (opcional para recordatorios)
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=tu_correo@gmail.com
+spring.mail.password=tu_contraseña_de_aplicacion
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+springdoc.api-docs.path=/api-docs
+springdoc.swagger-ui.path=/swagger-ui.html
+
+logging.level.com.dentalcare=INFO
