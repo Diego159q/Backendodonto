@@ -90,8 +90,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(
             Exception ex, WebRequest request) {
+        String detail = ex.getClass().getSimpleName() + ": " + (ex.getMessage() != null ? ex.getMessage() : "null");
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR,
-                "Error interno del servidor. Por favor, contacte con soporte.", request);
+                "Error interno: " + detail, request);
     }
 
     @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
