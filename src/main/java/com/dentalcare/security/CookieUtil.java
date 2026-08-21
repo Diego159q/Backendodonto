@@ -12,10 +12,10 @@ public class CookieUtil {
 
     private final String jwtCookieName = "jwt_token";
 
-    @Value("${cookie.secure:false}")
+    @Value("${cookie.secure:true}")
     private boolean isSecure;
 
-    @Value("${cookie.same-site:Lax}")
+    @Value("${cookie.same-site:None}")
     private String sameSite;
 
     @Value("${jwt.expiration:86400000}")
